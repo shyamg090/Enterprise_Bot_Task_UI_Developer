@@ -12,9 +12,6 @@ const LeftProfile = () => {
 
     const [show, setshow] = useState(false);
 
-    const [bg, setbg] = useState('#FFFFFF')
-
-
     const handleSearch = (e) => {
         // setsearch(e.target.value);
         const value = e.target.value.toLowerCase();
@@ -28,18 +25,9 @@ const LeftProfile = () => {
 
     const showFilter = () => {
         setshow(!show)
-
-        if(!show){
-            setbg('#c7faff')
-            // console.log('hello');
-            return;
-        }
-
-        setbg('#FFFFFF')
     }
 
     const handleFilter = (e) => {
-        // console.log(e.target.checked);
         if (e.target.checked) {
 
             const value = e.target.name;
@@ -48,7 +36,6 @@ const LeftProfile = () => {
             const filtered = users.filter((item) => {
                 return item.position.toLowerCase() == value.toLowerCase();
             });
-            // console.log(filtered);
 
             setfilter1(filtered);
 
@@ -73,7 +60,7 @@ const LeftProfile = () => {
                         <img src={search}></img>
                         <input type='text' placeholder='Search here' className=' outline-none border-none w-full' onChange={handleSearch} />
                     </div>
-                    <div className={`flex items-center justify-center w-[3rem] h-[3rem] cursor-pointer p-1 rounded-full bg-[${bg}]`} onClick={showFilter}>
+                    <div className={`flex items-center justify-center w-[3rem] h-[3rem] cursor-pointer p-1 rounded-full ${show ? 'bg-[#c7faff]' : 'bg-white'}`} onClick={showFilter}>
                         <img className='w-[1.2rem]' src={filter}></img>
                     </div>
                 </div>
@@ -103,7 +90,7 @@ const LeftProfile = () => {
 
             {
                 filter1.map((item, id) => {
-                    return <Profile key={id} data={item} />
+                    return <Profile key={id} data={item} id={id} />
 
                 })
             }
@@ -112,4 +99,4 @@ const LeftProfile = () => {
     )
 }
 
-export default LeftProfile
+export default LeftProfile;

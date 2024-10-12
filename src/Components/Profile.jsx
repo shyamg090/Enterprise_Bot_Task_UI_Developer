@@ -1,20 +1,26 @@
 import { useContext } from "react";
 import { AppContext } from "../Context/DataContext";
+import chatdata from '../utils/chatdata.json'
 
-const Profile = ({data}) => {
+const Profile = ({ data , id }) => {
 
-    const {name, last_online, headline, position, profile_pic} = data;
+    const { name, last_online, headline, position, profile_pic } = data;
 
-    const { page, setpage, setProfile } = useContext(AppContext);
+    const { setpage, setProfile, activechat, setactivechat} = useContext(AppContext);
 
-    const changepage = ()=>{
-        setProfile(data)
+    const changepage = () => {
+        setProfile(data);
+        setactivechat((prev)=>{
+            return prev.map((value,index)=>{
+                return index == id
+            })
+        })
         setpage(1);
     }
 
     return (
-        <div className="flex items-center justify-between p-4 cursor-pointer" onClick={changepage} >
-            <div className='h-[4rem] w-[4rem] rounded-full bg-cover bg-center' style={{backgroundImage: `url(${profile_pic})` }}>
+        <div className={`flex items-center justify-between p-4 cursor-pointer ${activechat[id] ? 'bg-[#F5F6FA]' : 'bg-white'}`} onClick={changepage} >
+            <div className='h-[4rem] w-[4rem] rounded-full bg-cover bg-center' style={{ backgroundImage: `url(${profile_pic})` }}>
             </div>
             <div className="flex flex-col w-[90%] leading-[1rem] p-1">
                 <div className="flex items-center justify-between p-2">
@@ -27,6 +33,5 @@ const Profile = ({data}) => {
     )
 }
 
-{/*         <div className='w-full min-h-[3.5rem] bg-cover bg-center flex items-end rounded-lg' style={{ backgroundImage: `url(${img})` }}>*/}
 
 export default Profile;

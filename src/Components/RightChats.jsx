@@ -1,16 +1,14 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import cross from '../assets/cross.svg';
 import { AppContext } from '../Context/DataContext';
 import UserChats from './UserChats';
-import { data } from '../utils/chatdata.json';
 
 const RightChats = () => {
 
-    const { setpage, chat, setchat, profile } = useContext(AppContext);
+    const { setpage, chat, setchat, profile, message, setmessage, data } = useContext(AppContext);
 
     const { name, last_online, headline, position, profile_pic } = profile;
 
-    const [message, setmessage] = useState(data);
 
     const handlechat = (e) => {
         setchat(e.target.value);
@@ -20,12 +18,22 @@ const RightChats = () => {
         setpage(0);
     }
 
-    const sendData = () => {
-        const updatedData = { ...data }; 
-        // console.log(updatedData.chat1[3].msg.message);
-        updatedData.chat1[3].msg.message = chat; 
-        // console.log(updatedData);
+    const [count , setcount] = useState(1);
+
+    const sendData2 = (count) => {
+
+        const updatedData = { ...data };
+        updatedData.chat1[count].msg.message = chat;
+        setchat('')
+
         setmessage(updatedData);
+
+        setTimeout(()=>{
+            updatedData.chat1[count+1].msg.message = "Sure! I will definitely help you with your query. Could you please confirm your email address?";
+            setmessage(updatedData);
+            setcount(3);
+        },1000);
+  
     }
 
     return (
@@ -55,19 +63,16 @@ const RightChats = () => {
                 </div>
             </div>
 
-
-            <div className='w-full h-full flex flex-col items-center justify-start gap-4'>
+            <div className='w-full h-full flex flex-col items-start justify-start gap-4'>
                 <UserChats data={message} />
             </div>
 
-
             <div className='flex border-t-[2px] border-t-gray-100 lg:p-8'>
                 <div className='w-[100%] flex bg-gray-100 p-6 lg:p-8'>
-                    <input type='text' placeholder='Message' className='bg-transparent w-[90%] outline-none' onChange={handlechat} ></input>
-                    <button className='lg:w-[5vw] lg:h-[5vh] text-title rounded-lg p-2' onClick={sendData} >send</button>
+                    <input type='text' placeholder='Message' className='bg-transparent w-[90%] outline-none' value={chat} onChange={handlechat} ></input>
+                    <button className='lg:w-[5vw] lg:h-[5vh] text-title rounded-lg p-2' onClick={()=> sendData2(count)} >send</button>
                 </div>
             </div>
-
         </div>
 
     )
